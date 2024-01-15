@@ -12,7 +12,8 @@ class App extends React.Component {
     const {store} =this.props;
 
     store.subscribe(()=>{
-    
+
+      console.log("Updated");
       
       this.forceUpdate()
     })
@@ -26,9 +27,9 @@ class App extends React.Component {
 
   isMovieFavourite = (movie)=>{
 
-    const {favourites} = this.props.store.getState();
+    const {movies} = this.props.store.getState();
 
-    const index=favourites.indexOf(movie);
+    const index=movies.favourites.indexOf(movie);
 
     if(index!==-1)
     {
@@ -46,14 +47,16 @@ class App extends React.Component {
 
   render()
   {
-    
-    const {list,favourites,showFavorites}=this.props.store.getState();
+    console.log("Render",this.props.store.getState());
 
+    const {movies}=this.props.store.getState();
+    
+    const {list,favourites,showFavorites}=movies;
     const displayMovies = showFavorites?favourites:list;
 
     
 
-    console.log("Test",this.props.store.getState());
+    
     return (
       <div className="App">
         <Navbar/>
