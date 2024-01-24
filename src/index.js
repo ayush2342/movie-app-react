@@ -1,13 +1,51 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createStore } from 'redux';
+import { createStore ,applyMiddleware} from 'redux';
+import {thunk} from 'redux-thunk';
 
 import './index.css';
 import App from './components/App';
 import rootReducer from './reducers'
 
+// const logger = ({dispatch,getState})=>{
 
-const store=createStore(rootReducer);
+//   return (next)=>{
+
+//     return (action)=>{
+//       console.log("Action-Type",action.type) 
+
+//       next(action);
+//     }
+    
+//   }
+
+// }
+
+
+const logger = ({dispatch,getState})=>(next)=>(action)=>{
+
+  if(typeof action !=='function')
+    {
+    console.log("Action-Type",action.type) 
+    }
+      next(action);
+
+}
+
+// const thunk = ({dispatch,getState})=>(next)=>(action)=>{
+
+//   if(typeof action ==='function')
+//   {
+//     action(dispatch)
+//     return;
+//   }
+
+//       next(action);
+
+// }
+
+
+const store=createStore(rootReducer,applyMiddleware(logger,thunk));
 // console.log("Store",store);
 // console.log("State",store.getState())
 
