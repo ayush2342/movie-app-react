@@ -1,7 +1,7 @@
 import React from 'react';
 import { addMovieToList,handleMovieSearch } from '../actions';
 import { connect } from 'react-redux';
-
+import firebase from '../firebase';
 
 class Navbar extends React.Component {
 
@@ -19,6 +19,15 @@ class Navbar extends React.Component {
 
         const {dispatch}=this.props;
         dispatch(addMovieToList(movie));
+
+        this.db=firebase.firestore();
+        this.db.collection('movie-list').add(movie)
+        .then((docRef) => {
+        console.log('Movie added to Firebase with ID: ', docRef.id);
+        })
+        .catch((error) => {
+        console.error('Error adding movie to Firebase: ', error);
+        });
         
     }
 

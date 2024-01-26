@@ -1,18 +1,36 @@
 import React from 'react';
-import {data} from '../data';
 import Navbar from './Navbar';
 import MovieCard from './MovieCard';
 import {addMovies,setShowFavourites} from '../actions'
 import { connect } from 'react-redux';
+import firebase from '../firebase';
 
 
 class App extends React.Component {
 
-  componentDidMount()
-  {
-
-    this.props.dispatch(addMovies(data));
+  componentDidMount() {
+    this.db = firebase.firestore();
+  
+    this.db.collection('movie-list').onSnapshot((movieSnapshot) => {
+      const movies = movieSnapshot.docs.map((doc) => {
+        const data = doc.data();
+        data['id'] = doc.id;
+        return data;
+      });
+  
+      this.db.collection('favourite').onSnapshot((favouritesSnapshot) => {
+        const favourites = favouritesSnapshot.docs.map((doc) => {
+          const data = doc.data();
+          data['id'] = doc.id;
+          return data;
+        });
+  
+       
+        this.props.dispatch(addMovies(movies, favourites));
+      });
+    });
   }
+  
 
   isMovieFavourite = (movie)=>{
 
@@ -41,8 +59,6 @@ class App extends React.Component {
     
     const {list,favourites,showFavorites}=movies;
     const displayMovies = showFavorites?favourites:list;
-
-    
 
     
     return (

@@ -1,5 +1,6 @@
 import React from 'react';
 import { addFavourite,removeFavourite } from '../actions';
+import firebase from '../firebase';
 
 
 class MovieCard extends React.Component {
@@ -7,14 +8,34 @@ class MovieCard extends React.Component {
     handleFavoruriteClick =()=>{
         const {movie} =this.props;
         
-        this.props.dispatch(addFavourite(movie))
+        this.props.dispatch(addFavourite(movie));
+
+        this.db=firebase.firestore();
+
+        this.db.collection('favourite').add(movie)
+        .then((docRef) => {
+        console.log('Movie added to Firebase with ID: ', docRef.id);
+        })
+        .catch((error) => {
+        console.error('Error adding movie to Firebase: ', error);
+        });
 
     }
 
     handleUnFavoruriteClick =()=>{
         const {movie} =this.props;
         
-        this.props.dispatch(removeFavourite(movie))
+        this.props.dispatch(removeFavourite(movie));
+
+        this.db=firebase.firestore();
+
+        this.db.collection('favourite').doc(movie.id).delete()
+      .then(() => {
+        console.log('Movie removed from Firebase successfully.');
+      })
+      .catch((error) => {
+        console.error('Error removing movie from Firebase: ', error);
+      });
 
     }
 

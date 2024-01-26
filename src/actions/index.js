@@ -14,10 +14,11 @@ export const ADD_SEARCH_RESULT="ADD_SEARCH_RESULT";
 
 
 // action creators
-export const addMovies =(movies)=>{
+export const addMovies =(movies,favourites)=>{
     return {
         type:ADD_MOVIES,
-        movies
+        movies,
+        favourites
         }
 }
 

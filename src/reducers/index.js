@@ -23,7 +23,8 @@ export function movies(state=initailMovieState,action){
         case ADD_MOVIES:
             return {
                         ...state,
-                        list:action.movies
+                        list:action.movies,
+                        favourites:action.favourites
                     } 
         case ADD_FAVOURITE:
             return {
